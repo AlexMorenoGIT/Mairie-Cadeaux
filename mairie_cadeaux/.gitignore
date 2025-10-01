@@ -33,3 +33,21 @@ htmlcov/
 # --- OS ---
 .DS_Store
 Thumbs.db
+
+# --- Frontend (Vite / Node) ---
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+frontend/.vite-temp/
+frontend/*.local
+
+# Logs du front
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+frontend/pnpm-debug.log*
+
+# Env du front
+frontend/.env
+frontend/.env.*
+!frontend/.env.example
