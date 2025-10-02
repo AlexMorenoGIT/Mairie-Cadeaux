@@ -21,11 +21,28 @@ class Colors:
 def log(message, color=Colors.GREEN, function_name="System"):
     print(f"{color}{Colors.BOLD}[Mairie-Cadeaux][" + function_name + f"]{Colors.END} {message}")
 
+def import_database():
+    try:
+        import database
+
+        if not database.DATABASE_PATH.exists() or database.is_database_empty(): 
+            log("Import de la base de donnée :", Colors.BLUE, "database")
+            database.init_database()
+            
+            print("Base de données initialisée avec succès!")
+            print(f"Emplacement: {database.DATABASE_PATH}")
+        if database.is_data_empty():
+            database.fill_database()
+
+    except Exception as e:
+        log("Impossible d'importer la database : " + str(e), Colors.RED, "database")
+        exit(0)
+
 def run_backend():
     """Lance le serveur Flask sur le port 5000"""
-    log("Démarrage du Backend Flask...", Colors.BLUE)
+    log("Démarrage du Backend Flask...", Colors.BLUE, "backend")
     try:
-        from app import app
+        from src.app import app
         app.run(debug=True, host='0.0.0.0', port=5000, use_reloader=False)
     except Exception as e:
         log(f"Erreur Backend: {e}", Colors.RED, "backend")

@@ -10,8 +10,8 @@ dependencies = [
 ]
 
 [project.scripts]
-app = "main:main"
-backend = "main:run_backend"
+app = "src.main:main"
+backend = "src.main:run_backend"
 
 [build-system]
 requires = ["hatchling"]
