@@ -23,7 +23,7 @@ def log(message, color=Colors.GREEN, function_name="System"):
 
 def import_database():
     try:
-        import database
+        import src.database as database
 
         if not database.DATABASE_PATH.exists() or database.is_database_empty(): 
             log("Import de la base de donnée :", Colors.BLUE, "database")
@@ -31,7 +31,9 @@ def import_database():
             
             print("Base de données initialisée avec succès!")
             print(f"Emplacement: {database.DATABASE_PATH}")
+        
         if database.is_data_empty():
+            log("Remplissage des données :", Colors.BLUE, "database")
             database.fill_database()
 
     except Exception as e:
@@ -52,7 +54,7 @@ def run_frontend():
     """Lance le serveur de dev Vue.js (Vite)"""
     log("Démarrage du Frontend Vue.js...", Colors.BLUE, "frontend")
     
-    frontend_path = Path(__file__).parent / "frontend"
+    frontend_path = Path(__file__).parent.parent / "frontend"
     print(frontend_path)
     if not frontend_path.exists():
         log("Le dossier 'frontend' n'existe pas!", Colors.RED, "frontend")
@@ -88,6 +90,9 @@ def main():
     print("\n" + "="*60)
     log("Démarrage de l'application Mairie-Cadeaux", Colors.GREEN, "main")
     print("="*60 + "\n")
+    
+    # Initialisation de la database
+    import_database()
     
     # Créer les threads pour lancer les deux serveurs
     backend_thread = Thread(target=run_backend, daemon=False)

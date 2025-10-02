@@ -12,10 +12,12 @@ dependencies = [
 [project.scripts]
 app = "src.main:main"
 backend = "src.main:run_backend"
+database = "src.main:import_database"
 
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
+
 
 [tool.hatch.build.targets.wheel]
 packages = ["."]

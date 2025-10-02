@@ -5,10 +5,11 @@ Script d'initialisation de la base de données SQLite pour Mairie-Cadeaux
 import sqlite3
 from pathlib import Path
 import json
+import traceback
 
-DATABASE_PATH = Path(__file__).parent / "data" / "mairie.db"
-#TABLES = ['homes', 'gifts', 'shipments', 'mails']
-TABLES = ['gifts']
+DATABASE_PATH = Path(__file__).parent.parent / "data" / "mairie.db"
+TABLES = ['homes', 'gifts', 'shipments', 'mails']
+
 
 def init_database():
     """
@@ -109,17 +110,12 @@ def init_database():
     # Sauvegarder les modifications
     conn.commit()
     
-    # Afficher un résumé
-    cursor.execute("SELECT name FROM sqlite_master WHERE type='table'")
-    tables = cursor.fetchall()
-    
     conn.close()
 
 def check_database_exist():
-    db_path = Path(__file__).parent / "data" / "mairie.db"
     
     # Si le fichier n'existe pas, on doit créer et nourrir
-    if not db_path.exists():
+    if not DATABASE_PATH.exists():
         return False
     return True
 
@@ -149,48 +145,40 @@ def fill_database():
     conn = sqlite3.connect(DATABASE_PATH)
     cursor = conn.cursor()
 
-    jsons_folder = Path(__file__).parent / "data"
+    jsons_folder = Path(__file__).parent.parent / "data"
     try:
         for table in TABLES:
-            with open(jsons_folder / table + "json", 'r', encoding="utf-8") as file:
+            file = table + ".json"
+            with open(jsons_folder / file, 'r', encoding="utf-8") as file:
                 content = json.load(file)
             
             for element in content:
                 keys = element.keys()
+                columns = ", ".join(element.keys())
+                placeholders = ", ".join(["?"] * len(keys))
+                values = tuple(element.values())
                 cursor.execute(
-                    "INSERT INTO " + table + " (" + stringify_keys(keys) + ")" +
-                    "VALUES (" + stringify_elements(element) + ")"
+                    f"INSERT INTO {table} ({columns}) VALUES ({placeholders})",
+                    values
                 )
+            print("Table [" + table + "] filled.")
 
-                conn.commit()
+            conn.commit()
         
         conn.close()
     except Exception as e:
         print(e)
+        traceback.print_exc()
         conn.close()
 
-def stringify_keys(keys):
-    string = ""
-    for i in keys:
-        string += str(i) + " "
-    return string
-
-def stringify_elements(dict):
-    string = ""
-    for i in dict.keys():
-        string += str(dict[i]) + " "
-    return string
-
 def is_database_empty():
-    """Vérifie si la base de données existe et est vide"""
-    db_path = Path(__file__).parent / "data" / "mairie.db"
     
     # Si le fichier n'existe pas, la base est vide
-    if not db_path.exists():
+    if not DATABASE_PATH.exists():
         return True
     
     # Si le fichier existe mais fait 0 bytes
-    if db_path.stat().st_size == 0:
+    if DATABASE_PATH.stat().st_size == 0:
         return True
     
     return False
@@ -199,9 +187,11 @@ def is_data_empty():
     """
     Vérifie si la base de données a besoin d'être nourrie avec des données.
     """
-    db_path = Path(__file__).parent / "data" / "mairie.db"
+    db_path = Path(__file__).parent.parent / "data" / "mairie.db"
     
-    # Si le fichier n'existe pas, on doit créer et nourrir
+    print(f"Chemin DB: {db_path}")
+    print(f"Existe: {db_path.exists()}")
+    
     if not db_path.exists():
         return True
     
@@ -209,34 +199,24 @@ def is_data_empty():
     cursor = conn.cursor()
     
     try:
-        # Vérifier les tables principales
-        
         for table in TABLES:
             cursor.execute(f"SELECT COUNT(*) FROM {table}")
             count = cursor.fetchone()[0]
             
-            # Si au moins une table a des données, pas besoin de nourrir
             if count > 0:
                 conn.close()
                 return False
         
-        # Toutes les tables sont vides
         conn.close()
         return True
         
-    except sqlite3.OperationalError:
-        # Les tables n'existent pas encore
+    except sqlite3.OperationalError as e:
         conn.close()
-        return True
 
 if __name__ == "__main__":
-    jsons_folder = Path(__file__).parent.parent / "data"
-    for table in TABLES:
-        file = table + ".json"
-        with open(jsons_folder / file, 'r', encoding="utf-8") as file:
-            content = json.load(file)
-        
-        for element in content:
-            keys = element.keys()
-            print(stringify_elements(element))
-            print(stringify_keys(keys))
+    print("Drop database . . .")
+    drop_all_tables()
+    print("Init database tables . . .")
+    init_database()
+    print("Fill database tables . . .")
+    fill_database()
