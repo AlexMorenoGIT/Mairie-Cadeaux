@@ -13,7 +13,7 @@ export default function App() {
     try {
       setLoading(true);
       // Appel à votre API Flask
-      const response = await fetch('http://localhost:5000/api/homes');
+      const response = await fetch('http://localhost:5001/api/homes');
       
       if (!response.ok) {
         throw new Error('Erreur lors du chargement des foyers');
