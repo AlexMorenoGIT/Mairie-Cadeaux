@@ -41,11 +41,11 @@ def import_database():
         exit(0)
 
 def run_backend():
-    """Lance le serveur Flask sur le port 5000"""
+    """Lance le serveur Flask sur le port 5001"""
     log("Démarrage du Backend Flask...", Colors.BLUE, "backend")
     try:
         from src.app import app
-        app.run(debug=True, host='0.0.0.0', port=5000, use_reloader=False)
+        app.run(debug=True, host='0.0.0.0', port=5001, use_reloader=False)
     except Exception as e:
         log(f"Erreur Backend: {e}", Colors.RED, "backend")
         sys.exit(1)
@@ -68,22 +68,17 @@ def run_frontend():
         return
     
     try:
-        # Lance npm run dev
-        process = subprocess.run(
-            ["npm", "run", "dev"], 
-            cwd=frontend_path, 
-            shell=True,
-            creationflags=subprocess.CREATE_NEW_PROCESS_GROUP if sys.platform == 'win32' else 0
+        process = subprocess.Popen(
+            ["npm", "run", "dev"],
+            cwd=frontend_path
         )
         process.wait()
-    except subprocess.CalledProcessError as e:
-        log(f"Erreur Frontend: {e}", Colors.RED, "frontend")
-        if sys.platform == 'win32':
-            process.terminate()
-        else:
-            process.send_signal(signal.SIGINT)
     except KeyboardInterrupt:
         log("Arrêt du Frontend", Colors.YELLOW, "frontend")
+        process.terminate()
+    except Exception as e:
+        log(f"Erreur Frontend: {e}", Colors.RED, "frontend")
+        process.terminate()
 
 def main():
     """Point d'entrée principal"""
@@ -102,7 +97,7 @@ def main():
     backend_thread.start()
     time.sleep(2)  # Attendre que Flask démarre
     
-    log("Backend lancé sur http://localhost:5000", Colors.GREEN, "main")
+    log("Backend lancé sur http://localhost:5001", Colors.GREEN, "main")
     
     # Puis démarrer le frontend
     frontend_thread.start()
@@ -113,7 +108,7 @@ def main():
     print("\n" + "="*60)
     log("Application prête !", Colors.GREEN, "main")
     log("Frontend: http://localhost:5173", Colors.BLUE, "main")
-    log("API Backend: http://localhost:5000/api", Colors.BLUE, "main")
+    log("API Backend: http://localhost:5001/api", Colors.BLUE, "main")
     print("="*60)
     log("Appuyez sur Ctrl+C pour arrêter", Colors.YELLOW, "main")
     print()
