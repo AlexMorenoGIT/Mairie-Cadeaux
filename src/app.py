@@ -5,6 +5,7 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 import json
 from pathlib import Path
+import sqlite3
 
 app = Flask(__name__)
 
@@ -16,16 +17,24 @@ DATA_FILE_PATH = Path(__file__).parent.parent / "data"
 
 @app.route('/api/homes', methods=['GET'])
 def load_homes():
-    """Charge les foyers depuis le fichier JSON"""
-    file = DATA_FILE_PATH / "homes.json"
-    try:
-        if file.exists():
-            with open(file, 'r', encoding='utf-8') as f:
-                return json.load(f)
-        return []
-    except Exception as e:
-        print(f"Erreur lors du chargement de homes.json: {e}")
-        return []
+    file = DATA_FILE_PATH / "mairie.db"
+    
+    conn = sqlite3.connect(file)
+    cursor = conn.cursor()
+
+    cursor.execute('''
+        SELECT * FROM homes
+    ''')
+    
+    data = cursor.fetchall()
+    columns = ['id', 'name', 'firstname', 'birth_date', 'email', 'postal_address', 'created_at']
+    homes = []
+    
+    for row in data:
+        home = dict(zip(columns, row))
+        homes.append(home)
+    
+    return json.dumps(homes, indent=2, ensure_ascii=False)
 
 # Base de données simulée pour les cadeaux (à garder si besoin)
 gifts_db = [
