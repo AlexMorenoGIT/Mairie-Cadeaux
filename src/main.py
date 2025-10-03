@@ -70,7 +70,8 @@ def run_frontend():
     try:
         process = subprocess.Popen(
             ["npm", "run", "dev"],
-            cwd=frontend_path
+            cwd=frontend_path,
+            shell=(sys.platform == "win32") 
         )
         process.wait()
     except KeyboardInterrupt:
