@@ -12,7 +12,7 @@ app = Flask(__name__)
 CORS(app, resources={r"/api/*": {"origins": "http://localhost:5173"}})
 
 # Chemin vers le fichier homes.json
-DATA_FILE_PATH = Path(__file__).parent / "data"
+DATA_FILE_PATH = Path(__file__).parent.parent / "data"
 
 @app.route('/api/homes', methods=['GET'])
 def load_homes():
