@@ -59,7 +59,6 @@ def init_database():
             id TEXT PRIMARY KEY,
             home_id TEXT NOT NULL,
             gift_id TEXT NOT NULL,
-            ship_date TEXT NOT NULL,
             status TEXT NOT NULL,
             created_at TEXT NOT NULL,
             FOREIGN KEY (home_id) REFERENCES homes(id) ON DELETE CASCADE,
