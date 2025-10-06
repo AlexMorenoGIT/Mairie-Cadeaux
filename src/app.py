@@ -1,94 +1,44 @@
 """
-API Flask pour Mairie-Cadeaux
+Application Flask principale avec Blueprints
 """
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify
 from flask_cors import CORS
-import json
-from pathlib import Path
-import sqlite3
+from src.config import Config
 
-app = Flask(__name__)
+# Importer tous les blueprints
+from src.routes.homes_routes import homes_bp
 
-# Activer CORS pour autoriser les requêtes depuis React (localhost:5173)
-CORS(app, resources={r"/api/*": {"origins": "http://localhost:5173"}})
+def create_app():
+    """Factory pour créer l'application Flask"""
+    app = Flask(__name__)
+    app.config.from_object(Config)
 
-# Chemin vers le fichier homes.json
-DATA_FILE_PATH = Path(__file__).parent.parent / "data"
-
-@app.route('/api/homes', methods=['GET'])
-def load_homes():
-    file = DATA_FILE_PATH / "mairie.db"
-    
-    conn = sqlite3.connect(file)
-    cursor = conn.cursor()
-
-    cursor.execute('''
-        SELECT * FROM homes
-    ''')
-    
-    data = cursor.fetchall()
-    columns = ['id', 'name', 'firstname', 'birth_date', 'email', 'postal_address', 'created_at']
-    homes = []
-    
-    for row in data:
-        home = dict(zip(columns, row))
-        homes.append(home)
-    
-    return json.dumps(homes, indent=2, ensure_ascii=False)
-
-# Base de données simulée pour les cadeaux (à garder si besoin)
-gifts_db = [
-    {"id": 1, "name": "Vélo électrique", "price": 800, "category": "Sport"},
-    {"id": 2, "name": "Tablette", "price": 350, "category": "Électronique"},
-    {"id": 3, "name": "Coffret bien-être", "price": 120, "category": "Détente"},
-]
-
-@app.route('/')
-def index():
-    """Page d'accueil de l'API"""
-    return jsonify({
-        "message": "Bienvenue sur l'API Mairie-Cadeaux",
-        "version": "1.0.0",
-        "endpoints": {
-            "gifts": "/api/gifts",
-            "gift_by_id": "/api/gifts/<id>",
-        }
+    # Configuration CORS
+    CORS(app, resources={
+        r"/api/*": {"origins": Config.CORS_ORIGINS}
     })
 
-@app.route('/api/gifts', methods=['GET'])
-def get_gifts():
-    """Récupère tous les cadeaux"""
-    return jsonify(gifts_db)
+    # Enregistrer les blueprints
+    app.register_blueprint(homes_bp)
 
-@app.route('/api/gifts/<int:gift_id>', methods=['GET'])
-def get_gift(gift_id):
-    """Récupère un cadeau spécifique"""
-    gift = next((g for g in gifts_db if g["id"] == gift_id), None)
-    if gift:
-        return jsonify(gift)
-    return jsonify({"error": "Cadeau non trouvé"}), 404
+    # Route d'accueil
+    @app.route('/')
+    def index():
+        return jsonify({
+            "message": "API Mairie-Cadeaux",
+            "version": "2.0.0",
+            "endpoints": {
+                "homes": "/api/homes",
+                "gifts": "/api/gifts",
+                "shipments": "/api/shipments",
+                "mails": "/api/mails"
+            }
+        })
 
-@app.route('/api/gifts', methods=['POST'])
-def create_gift():
-    """Crée un nouveau cadeau"""
-    data = request.get_json()
-    
-    new_gift = {
-        "id": len(gifts_db) + 1,
-        "name": data.get("name"),
-        "price": data.get("price"),
-        "category": data.get("category", "Autre")
-    }
-    
-    gifts_db.append(new_gift)
-    return jsonify(new_gift), 201
+    return app
 
-@app.route('/api/gifts/<int:gift_id>', methods=['DELETE'])
-def delete_gift(gift_id):
-    """Supprime un cadeau"""
-    global gifts_db
-    gifts_db = [g for g in gifts_db if g["id"] != gift_id]
-    return jsonify({"message": "Cadeau supprimé"}), 200
+# Pour le lancement direct
+app = create_app()
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    app.run(debug=True, port=5001)
