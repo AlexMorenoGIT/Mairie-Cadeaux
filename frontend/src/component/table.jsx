@@ -20,7 +20,7 @@ export function DataTable({
             if (!response.ok) throw new Error("Erreur lors du chargement des données");
 
             const result = await response.json();
-            setData(result);
+            setData(Array.isArray(result) ? result : []);
             setError(null);
         } catch (err) {
             console.error("Erreur:", err);
