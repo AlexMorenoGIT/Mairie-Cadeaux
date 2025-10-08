@@ -28,12 +28,13 @@ def eligible():
         if success :
             try:
                 for home in success:
-                    created_at_str = home.get('created_at')
+                    created_at_str = home.get('birth_date')
                     created_at_date = datetime.date.fromisoformat(created_at_str)
                     today = datetime.date.today()
                     age = today.year - created_at_date.year - (
                         (today.month, today.day) < (created_at_date.month, created_at_date.day)
                     )
+                    print(age)
                     gift = GiftsService.get_gift_by_age(age)
                     home['gift'] = gift
                 return jsonify(success), 200
