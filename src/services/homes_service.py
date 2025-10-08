@@ -2,7 +2,7 @@
 Service contenant la logique métier pour les foyers
 """
 from typing import List, Dict, Optional
-from datetime import datetime
+import datetime
 import uuid
 from src.models.home import HomeModel
 
@@ -43,7 +43,7 @@ class HomesService:
             'birth_date': data['birth_date'],
             'email': data['email'],
             'postal_address': data['postal_address'],
-            'created_at': datetime.now().isoformat()
+            'created_at': datetime.date.today().isoformat()
         }
 
         home_id = HomeModel.create(home_data)
