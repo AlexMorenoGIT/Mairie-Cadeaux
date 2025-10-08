@@ -6,7 +6,7 @@
     "birth_date": "1998-03-04",
     "email": "aurélien.perrin@example.com",
     "postal_address": "3 place de la République, 17467 Paris",
-    "created_at": "2025-01-07T15:32:40.913404"
+    "created_at": "2024-10-08"
   },
   {
     "id": "0453f107-976f-4df7-9325-1f000ffbfe66",
@@ -15,7 +15,7 @@
     "birth_date": "2025-07-21",
     "email": "marc.laurent@example.com",
     "postal_address": "7 boulevard Saint-Germain, 55301 Toulouse",
-    "created_at": "2025-08-19T11:43:40.913716"
+    "created_at": "2025-08-19"
   },
   {
     "id": "e42f54b0-11b7-474b-a3ae-2da5a754e34d",
@@ -24,7 +24,7 @@
     "birth_date": "2011-01-05",
     "email": "hugo.colin@example.com",
     "postal_address": "14 rue du Moulin, 24180 Marseille",
-    "created_at": "2023-11-05T09:21:40.913784"
+    "created_at": "2023-11-05"
   },
   {
     "id": "2676b215-4723-4e6c-9b1d-e0d341fdc1cd",

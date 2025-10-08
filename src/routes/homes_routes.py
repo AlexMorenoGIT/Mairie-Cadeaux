@@ -1,7 +1,11 @@
 """
 Blueprint Flask pour les routes /api/homes
 """
+import datetime
+
 from flask import Blueprint, jsonify, request
+
+from src.services.gift_service import GiftsService
 from src.services.homes_service import HomesService
 
 # Créer le Blueprint
@@ -22,7 +26,19 @@ def eligible():
     try:
         success = HomesService.get_homes_eligible()
         if success :
-            return jsonify(success), 200
+            try:
+                for home in success:
+                    created_at_str = home.get('created_at')
+                    created_at_date = datetime.date.fromisoformat(created_at_str)
+                    today = datetime.date.today()
+                    age = today.year - created_at_date.year - (
+                        (today.month, today.day) < (created_at_date.month, created_at_date.day)
+                    )
+                    gift = GiftsService.get_gift_by_age(age)
+                    home['gift'] = gift
+                return jsonify(success), 200
+            except Exception as e:
+                return jsonify({"error": str(e)}), 500
         return jsonify({"message": "Pas de foyer éligible"}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500

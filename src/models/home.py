@@ -69,8 +69,9 @@ class HomeModel:
     @staticmethod
     def get_eligible() -> List[Dict]:
         """Récupérer les personnes éligibles"""
-        datenow = datetime.date.today().isoformat()
+        datenow = datetime.date.today()
+        date_last_year = datenow.replace(year=datenow.year - 1).isoformat()
         query = "SELECT * FROM homes WHERE  DATE(created_at) = ?"
-        results = execute_query(query, (datenow,))
+        results = execute_query(query, (date_last_year,))
         return results
 
