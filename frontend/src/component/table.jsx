@@ -10,10 +10,14 @@ export function DataTable({
                           }) {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [attributions, setAttributions] = useState(false);
     const [error, setError] = useState(null);
 
     useEffect(() => {
         loadData();
+        if (run){
+            checkAttributionToday();
+        }
     }, [apiUrl]);
 
     const loadData = async () => {
@@ -32,6 +36,27 @@ export function DataTable({
             setLoading(false);
         }
     };
+    const checkAttributionToday = async () => {
+        try {
+            const response = await fetch('http://localhost:5001/api/shipments');
+            if (!response.ok) throw new Error("Erreur lors du chargement de la vérification de l'attribution");
+
+            const result = await response.json();
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            const attributionToday = result.some(shipment => {
+                const shipmentDate = new Date(shipment.created_at);
+                shipmentDate.setHours(0, 0, 0, 0);
+                console.log(shipmentDate, today);
+                return shipmentDate.getTime() === today.getTime();
+            });
+
+            setAttributions(attributionToday);
+        } catch (error) {
+            console.error("Erreur lors de la vérification:", error);
+        }
+    };
 
     const runAttribution = async () => {
         try {
@@ -47,7 +72,7 @@ export function DataTable({
                 }
             }
             alert("Attributions réussies")
-            loadData(); // Recharger les données après les attributions
+            window.location.reload()
         } catch (error) {
             console.error("Erreur:", error);
             setError(error.message);
@@ -137,7 +162,7 @@ export function DataTable({
                             >
                                 Voir la liste des attributions effectués →
                             </button>
-                            {data.length > 0 && (
+                            {data.length > 0 && attributions === false && (
                                 <button
                                     onClick={runAttribution}
                                     className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200 shadow-md hover:shadow-lg"
