@@ -19,5 +19,4 @@ class GiftModel:
     def get_by_age(age: int) -> Optional[Dict]:
         query = "SELECT * FROM gifts WHERE min_age <= ? AND max_age >= ? ORDER BY quantity DESC LIMIT 1;"
         results = execute_query(query, (age,age))
-        print(results)
         return results[0] if results else None

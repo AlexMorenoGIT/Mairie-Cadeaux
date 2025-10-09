@@ -34,7 +34,6 @@ def eligible():
                     age = today.year - created_at_date.year - (
                         (today.month, today.day) < (created_at_date.month, created_at_date.day)
                     )
-                    print(age)
                     gift = GiftsService.get_gift_by_age(age)
                     home['gift'] = gift
                 return jsonify(success), 200

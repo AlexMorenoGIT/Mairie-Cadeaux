@@ -4,6 +4,7 @@ export function DataTable({
                               apiUrl,
                               title = "Tableau de données",
                               emptyMessage = "Aucune donnée disponible",
+                              run = false,
                           }) {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -30,6 +31,29 @@ export function DataTable({
         }
     };
 
+    const runAttribution = async () => {
+        try {
+            for (let i = 0; i<data.length; i++) {
+                const response = await fetch(`http://localhost:5001/api/shipments/${data[i]['id']}`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    }
+                })
+                if (!response.ok) {
+                    throw new Error('Erreur lors du lancement de l\'attribution')
+                }
+                await response.json();
+                alert("Attribution réussi")
+
+            }
+
+        } catch (error) {
+            console.error("Erreur:", error);
+            setError(error);
+        }
+    }
+
     const formatDate = (dateString) => new Date(dateString).toLocaleDateString("fr-FR");
 
     const columns = [
@@ -49,6 +73,12 @@ export function DataTable({
             key: "postal_address",
             header: "Adresse",
             render: (value) => <span className="text-sm text-gray-500 max-w-xs truncate">{value}</span>,
+        },
+        {
+            key: 'gift',
+            header: "Cadeau",
+            render: (value) => <span className="text-sm text-gray-500">{value['name']}</span>,
+
         },
         {
             key: "created_at",
@@ -87,6 +117,7 @@ export function DataTable({
     // --- Affichage principal ---
     return (
         <div className="bg-white rounded-2xl shadow-lg p-6">
+
             <div className="mb-6 flex items-center justify-between flex-wrap gap-2">
                 <div>
                     <h2 className="text-2xl font-bold text-gray-900 mb-1">{title}</h2>
@@ -94,6 +125,15 @@ export function DataTable({
                         {data.length} foyer{data.length > 1 ? "s" : ""} trouvé{data.length > 1 ? "s" : ""}
                     </p>
                 </div>
+                {run &&
+                    <button
+                        onClick={runAttribution}
+                        className="bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-2 px-4 rounded-lg transition"
+                    >
+                        Lancer les attributions
+                    </button>
+
+                }
                 <button
                     onClick={loadData}
                     className="bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-2 px-4 rounded-lg transition"

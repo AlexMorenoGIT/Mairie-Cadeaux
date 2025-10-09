@@ -17,7 +17,6 @@ export function HomeAddPage({ onNavigate }) {
         e.preventDefault();
 
         try {
-            console.log(JSON.stringify(formData));
             const response = await fetch("http://localhost:5001/api/homes", {
                 method: "POST",
                 headers: {
