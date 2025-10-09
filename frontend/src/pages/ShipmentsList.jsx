@@ -3,16 +3,7 @@ import {DataTable} from "../component/table.jsx";
 export function ShipmentsList({ onNavigate }) {
     const shipmentsColumns = [
         {
-            key: "id",
-            header: "ID",
-            render: (value) => (
-                <span className="text-xs text-gray-500 font-mono">
-                    {value}
-                </span>
-            ),
-        },
-        {
-            key: "home_id",
+            key: "homes",
             header: "Foyer",
             render: (value) => (
                 <span className="text-xs text-gray-500 font-mono">
@@ -21,7 +12,7 @@ export function ShipmentsList({ onNavigate }) {
             ),
         },
         {
-            key: "gift_id",
+            key: "gifts",
             header: "Cadeau",
             render: (value) => (
                 <span className="text-xs text-gray-500 font-mono">
