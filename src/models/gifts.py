@@ -10,8 +10,8 @@ class GiftModel:
         return execute_query(query)
 
     @staticmethod
-    def get_by_id(id: int) -> Optional[Dict]:
-        query = "SELECT * FROM gifts WHERE gift_id = ?"
+    def get_by_id(id: str) -> Optional[Dict]:
+        query = "SELECT * FROM gifts WHERE id = ?"
         results = execute_query(query, (id,))
         return results[0] if results else None
 

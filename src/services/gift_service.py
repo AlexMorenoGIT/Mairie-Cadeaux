@@ -9,7 +9,7 @@ class GiftsService:
         return GiftModel.get_all()
 
     @staticmethod
-    def get_gift_by_id(giftid: int) -> Optional[Dict]:
+    def get_gift_by_id(giftid : str) -> Optional[Dict]:
         return GiftModel.get_by_id(giftid)
 
     @staticmethod
