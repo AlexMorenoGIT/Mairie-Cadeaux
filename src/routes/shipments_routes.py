@@ -17,7 +17,6 @@ def get_shipments():
         shipments = ShipmentsService.get_all_shipments()
         shipments_with_details = []
         for shipment in shipments:
-            print(shipment['gift_id'])
             homeslinked = HomesService.get_home_by_id(shipment['home_id'])
             giftslinked = GiftsService.get_gift_by_id(shipment['gift_id'])
             name  = homeslinked['firstname'] + ' ' + homeslinked['name']
