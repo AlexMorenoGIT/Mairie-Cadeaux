@@ -7,6 +7,9 @@ from src.config import Config
 
 # Importer tous les blueprints
 from src.routes.homes_routes import homes_bp
+from src.routes.shipments_routes import shipments_bp
+from src.routes.gifts_routes import gifts_bp
+
 
 def create_app():
     """Factory pour créer l'application Flask"""
@@ -20,6 +23,8 @@ def create_app():
 
     # Enregistrer les blueprints
     app.register_blueprint(homes_bp)
+    app.register_blueprint(shipments_bp)
+    app.register_blueprint(gifts_bp)
 
     # Route d'accueil
     @app.route('/')

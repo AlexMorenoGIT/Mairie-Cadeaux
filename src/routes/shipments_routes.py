@@ -8,7 +8,7 @@ from src.services.shipments_service import ShipmentsService
 # Créer le Blueprint
 shipments_bp = Blueprint('shipments', __name__, url_prefix='/api/shipments')
 
-@shipments_bp.route('/', methods=['GET'])
+@shipments_bp.route('', methods=['GET'])
 def get_shipments():
     """GET /api/shipments - Liste tous les envoies"""
     try:
@@ -21,6 +21,8 @@ def get_shipments():
 def create_shipment(home_id):
     """POST /api/shipments/<home_id> - Creates new shipment"""
     try:
+        print(home_id)
+        home_id = str(home_id)
         shipment = ShipmentsService.create_shipment(home_id)
         if shipment:
             return jsonify(shipment), 201

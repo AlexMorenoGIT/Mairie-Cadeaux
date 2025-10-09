@@ -19,14 +19,13 @@ class ShipmentModel:
     @staticmethod
     def create(data: Dict) -> str:
         query = """
-            INSERT INTO shipments (id, home_id, gift_id, ship_date, status, created_at)
-            VALUES (?, ?, ?, ?, ?, ?)
+            INSERT INTO shipments (id, home_id, gift_id, status, created_at)
+            VALUES (?, ?, ?, ?, ?)
         """
         params = (
             data['id'],
             data['home_id'],
             data['gift_id'],
-            data['ship_date'],
             data['status'],
             data['created_at']
         )
