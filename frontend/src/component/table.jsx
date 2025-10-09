@@ -5,6 +5,8 @@ export function DataTable({
                               title = "Tableau de données",
                               emptyMessage = "Aucune donnée disponible",
                               run = false,
+                              onNavigate,
+                              columns,
                           }) {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -33,7 +35,7 @@ export function DataTable({
 
     const runAttribution = async () => {
         try {
-            for (let i = 0; i<data.length; i++) {
+            for (let i = 0; i < data.length; i++) {
                 const response = await fetch(`http://localhost:5001/api/shipments/${data[i]['id']}`, {
                     method: "POST",
                     headers: {
@@ -43,20 +45,22 @@ export function DataTable({
                 if (!response.ok) {
                     throw new Error('Erreur lors du lancement de l\'attribution')
                 }
-                await response.json();
-                alert("Attribution réussi")
-
             }
-
+            alert("Attributions réussies")
+            loadData(); // Recharger les données après les attributions
         } catch (error) {
             console.error("Erreur:", error);
-            setError(error);
+            setError(error.message);
         }
     }
 
-    const formatDate = (dateString) => new Date(dateString).toLocaleDateString("fr-FR");
+    const formatDate = (dateString) => {
+        if (!dateString) return "-";
+        return new Date(dateString).toLocaleDateString("fr-FR");
+    };
 
-    const columns = [
+    // Colonnes par défaut pour les foyers (homes)
+    const defaultColumns = [
         {key: "name", header: "Nom"},
         {key: "firstname", header: "Prénom"},
         {
@@ -77,8 +81,7 @@ export function DataTable({
         {
             key: 'gift',
             header: "Cadeau",
-            render: (value) => <span className="text-sm text-gray-500">{value['name']}</span>,
-
+            render: (value) => <span className="text-sm text-gray-500">{value?.name || "-"}</span>,
         },
         {
             key: "created_at",
@@ -87,7 +90,8 @@ export function DataTable({
         },
     ];
 
-    // --- États spéciaux ---
+    const columnsToUse = columns || defaultColumns;
+
     if (loading) {
         return (
             <div className="flex justify-center py-10">
@@ -117,36 +121,48 @@ export function DataTable({
     // --- Affichage principal ---
     return (
         <div className="bg-white rounded-2xl shadow-lg p-6">
-
             <div className="mb-6 flex items-center justify-between flex-wrap gap-2">
                 <div>
                     <h2 className="text-2xl font-bold text-gray-900 mb-1">{title}</h2>
                     <p className="text-gray-600">
-                        {data.length} foyer{data.length > 1 ? "s" : ""} trouvé{data.length > 1 ? "s" : ""}
+                        {data.length} élément{data.length > 1 ? "s" : ""} trouvé{data.length > 1 ? "s" : ""}
                     </p>
                 </div>
-                {run &&
+                <div className="flex flex-wrap gap-2">
+                    {run && onNavigate && (
+                        <>
+                            <button
+                                onClick={() => onNavigate("shipments")}
+                                className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200 shadow-md hover:shadow-lg"
+                            >
+                                Voir la liste des attributions effectués →
+                            </button>
+                            {data.length > 0 && (
+                                <button
+                                    onClick={runAttribution}
+                                    className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200 shadow-md hover:shadow-lg"
+                                >
+                                    Lancer les attributions
+                                </button>
+                            )
+                            }
+
+                        </>
+                    )}
                     <button
-                        onClick={runAttribution}
+                        onClick={loadData}
                         className="bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-2 px-4 rounded-lg transition"
                     >
-                        Lancer les attributions
+                        ↻ Actualiser
                     </button>
-
-                }
-                <button
-                    onClick={loadData}
-                    className="bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-2 px-4 rounded-lg transition"
-                >
-                    ↻ Actualiser
-                </button>
+                </div>
             </div>
 
             <div className="overflow-x-auto">
                 <table className="min-w-full divide-y divide-gray-200">
                     <thead className="bg-gray-50">
                     <tr>
-                        {columns.map((col) => (
+                        {columnsToUse.map((col) => (
                             <th
                                 key={col.key}
                                 className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
@@ -161,7 +177,7 @@ export function DataTable({
                     {data.length === 0 ? (
                         <tr>
                             <td
-                                colSpan={columns.length}
+                                colSpan={columnsToUse.length}
                                 className="px-6 py-8 text-center text-gray-500"
                             >
                                 {emptyMessage}
@@ -169,8 +185,8 @@ export function DataTable({
                         </tr>
                     ) : (
                         data.map((row, idx) => (
-                            <tr key={idx} className="hover:bg-gray-50 transition">
-                                {columns.map((col) => (
+                            <tr key={row.id || idx} className="hover:bg-gray-50 transition">
+                                {columnsToUse.map((col) => (
                                     <td
                                         key={col.key}
                                         className="px-6 py-4 whitespace-nowrap"
@@ -179,7 +195,7 @@ export function DataTable({
                                             ? col.render(row[col.key], row)
                                             : (
                                                 <div className="text-sm text-gray-900">
-                                                    {row[col.key]}
+                                                    {row[col.key] || "-"}
                                                 </div>
                                             )}
                                     </td>

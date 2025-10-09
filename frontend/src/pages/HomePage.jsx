@@ -29,7 +29,8 @@ export function HomePage({ onNavigate }) {
                     apiUrl="http://localhost:5001/api/homes/eligible"
                     title="Foyers éligibles"
                     emptyMessage="Aucun foyer éligible trouvé"
-                    run="true"
+                    run={true}
+                    onNavigate={onNavigate}
                 />
             </div>
         </div>
