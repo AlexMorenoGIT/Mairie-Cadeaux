@@ -3,6 +3,8 @@ Blueprint Flask pour les routes /api/shipments
 """
 from flask import Blueprint, jsonify, request
 
+from src.services.gift_service import GiftsService
+from src.services.homes_service import HomesService
 from src.services.shipments_service import ShipmentsService
 
 # Créer le Blueprint
@@ -13,7 +15,22 @@ def get_shipments():
     """GET /api/shipments - Liste tous les envoies"""
     try:
         shipments = ShipmentsService.get_all_shipments()
-        return jsonify(shipments), 200
+        shipments_with_details = []
+        for shipment in shipments:
+            print(shipment['gift_id'])
+            homeslinked = HomesService.get_home_by_id(shipment['home_id'])
+            giftslinked = GiftsService.get_gift_by_id(shipment['gift_id'])
+            name  = homeslinked['firstname'] + ' ' + homeslinked['name']
+            shipments_with_details.append({
+                'id': shipment['id'],
+                'homes': name,
+                'gifts': giftslinked['name'],
+                'status': shipment['status'],
+                'created_at': shipment['created_at'],
+
+            })
+
+        return jsonify(shipments_with_details), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 

@@ -7,7 +7,7 @@ from src.utils import execute_query, execute_update
 class ShipmentModel:
     @staticmethod
     def get_all() -> List[Dict]:
-        query = "SELECT * FROM shipments ORDER BY created_at"
+        query = "SELECT * FROM shipments ORDER BY created_at DESC"
         return execute_query(query)
 
     @staticmethod
