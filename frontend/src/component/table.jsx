@@ -7,15 +7,20 @@ export function DataTable({
                               run = false,
                               onNavigate,
                               columns,
+                              withActions = false,
+                              onEdit,
+                              onDeleted,
+                              getRowId = (row) => row.id,
                           }) {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [attributions, setAttributions] = useState(false);
     const [error, setError] = useState(null);
+    const [busyId, setBusyId] = useState(null);
 
     useEffect(() => {
         loadData();
-        if (run){
+        if (run) {
             checkAttributionToday();
         }
     }, [apiUrl]);
@@ -117,6 +122,76 @@ export function DataTable({
 
     const columnsToUse = columns || defaultColumns;
 
+    const handleEdit = (row) => {
+        if (onEdit) {
+            onEdit(row);
+            return;
+        }
+        if (onNavigate) {
+            onNavigate("edit-home", { id: getRowId(row), row });
+        } else {
+            alert("Aucune action d’édition configurée.");
+        }
+    };
+
+    const handleDelete = async (row) => {
+        const id = getRowId(row);
+        if (!id) return;
+
+        const ok = confirm(`Supprimer le foyer #${id} ?`);
+        if (!ok) return;
+
+        try {
+            setBusyId(id);
+            const res = await fetch(`${apiUrl}/${id}`, { method: "DELETE" });
+            if (!res.ok) {
+                const body = await res.json().catch(() => ({}));
+                throw new Error(body?.error || "Suppression impossible");
+            }
+            // Optimistic update
+            setData((prev) => prev.filter((r) => getRowId(r) !== id));
+            if (onDeleted) onDeleted(id);
+        } catch (e) {
+            console.error(e);
+            alert(e.message || "Erreur lors de la suppression");
+        } finally {
+            setBusyId(null);
+        }
+    };
+
+    const finalColumns = withActions
+        ? [
+            ...columnsToUse,
+            {
+                key: "__actions",
+                header: "Actions",
+                render: (_v, row) => (
+                    <div className="flex items-center gap-2 justify-end">
+                        <button
+                            onClick={() => handleEdit(row)}
+                            className="inline-flex items-center gap-1 bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 px-3 py-1.5 rounded-lg text-sm"
+                            title="Éditer"
+                        >
+                            ✏️ Éditer
+                        </button>
+                        <button
+                            onClick={() => handleDelete(row)}
+                            disabled={busyId === getRowId(row)}
+                            className={`inline-flex items-center gap-1 ${
+                                busyId === getRowId(row)
+                                    ? "bg-red-300 cursor-not-allowed"
+                                    : "bg-red-600 hover:bg-red-700"
+                            } text-white px-3 py-1.5 rounded-lg text-sm`}
+                            title="Supprimer"
+                        >
+                            🗑️ Supprimer
+                        </button>
+                    </div>
+                ),
+            },
+        ]
+        : columnsToUse;
+
     if (loading) {
         return (
             <div className="flex justify-center py-10">
@@ -187,7 +262,7 @@ export function DataTable({
                 <table className="min-w-full divide-y divide-gray-200">
                     <thead className="bg-gray-50">
                     <tr>
-                        {columnsToUse.map((col) => (
+                        {finalColumns.map((col) => (
                             <th
                                 key={col.key}
                                 className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
@@ -197,32 +272,23 @@ export function DataTable({
                         ))}
                     </tr>
                     </thead>
-
                     <tbody className="bg-white divide-y divide-gray-200">
                     {data.length === 0 ? (
                         <tr>
-                            <td
-                                colSpan={columnsToUse.length}
-                                className="px-6 py-8 text-center text-gray-500"
-                            >
+                            <td colSpan={finalColumns.length} className="px-6 py-8 text-center text-gray-500">
                                 {emptyMessage}
                             </td>
                         </tr>
                     ) : (
                         data.map((row, idx) => (
-                            <tr key={row.id || idx} className="hover:bg-gray-50 transition">
-                                {columnsToUse.map((col) => (
-                                    <td
-                                        key={col.key}
-                                        className="px-6 py-4 whitespace-nowrap"
-                                    >
-                                        {col.render
-                                            ? col.render(row[col.key], row)
-                                            : (
-                                                <div className="text-sm text-gray-900">
-                                                    {row[col.key] || "-"}
-                                                </div>
-                                            )}
+                            <tr key={getRowId(row) ?? idx} className="hover:bg-gray-50 transition">
+                                {finalColumns.map((col) => (
+                                    <td key={col.key} className="px-6 py-4 whitespace-nowrap">
+                                        {col.render ? col.render(row[col.key], row) : (
+                                            <div className="text-sm text-gray-900">
+                                                {row[col.key] ?? "-"}
+                                            </div>
+                                        )}
                                     </td>
                                 ))}
                             </tr>

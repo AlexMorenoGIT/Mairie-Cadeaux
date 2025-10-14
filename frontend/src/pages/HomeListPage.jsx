@@ -1,6 +1,10 @@
 import {DataTable} from "../component/table.jsx";
 
 export function HomesListPage({ onNavigate }) {
+    const handleEdit = (row) => {
+        onNavigate?.("edit-home", { id: row.id, row });
+    };
+
     return (
         <div className="min-h-screen bg-gray-50 py-8 px-4">
             <div className="max-w-7xl mx-auto">
@@ -18,6 +22,8 @@ export function HomesListPage({ onNavigate }) {
                     apiUrl="http://localhost:5001/api/homes"
                     title="Tous les foyers"
                     emptyMessage="Aucun foyer enregistré"
+                    withActions={true}
+                    onEdit={handleEdit}
                 />
             </div>
         </div>
