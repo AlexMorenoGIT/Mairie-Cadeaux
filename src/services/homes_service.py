@@ -5,6 +5,7 @@ from typing import List, Dict, Optional
 import datetime
 import uuid
 from src.models.home import HomeModel
+from src.services.shipments_service import ShipmentsService
 
 
 class HomesService:
@@ -62,12 +63,19 @@ class HomesService:
 
     @staticmethod
     def delete_home(home_id: str) -> bool:
-        """Supprime un foyer"""
         existing = HomeModel.get_by_id(home_id)
         if not existing:
             return False
 
+        # Import local pour éviter l'import circulaire au chargement du module
+        from src.services.shipments_service import ShipmentsService
+
+        hasShipment = ShipmentsService.get_shipment_by_home(home_id)
+        if hasShipment:
+            ShipmentsService.delete_shipment_by_home_id(home_id)
+
         return HomeModel.delete(home_id)
+
 
     @staticmethod
     def get_homes_eligible() -> List[Dict]:

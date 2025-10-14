@@ -17,6 +17,12 @@ class ShipmentModel:
         return result[0] if result else None
 
     @staticmethod
+    def get_by_home_id(home_id: str) -> Optional[Dict]:
+        query = "SELECT * FROM shipments WHERE home_id = ?"
+        result = execute_query(query, (home_id,))
+        return result[0] if result else None
+
+    @staticmethod
     def create(data: Dict) -> str:
         query = """
             INSERT INTO shipments (id, home_id, gift_id, status, created_at)
@@ -41,3 +47,10 @@ class ShipmentModel:
         query = "SELECT * FROM shipments WHERE created_at = ?"
         result = execute_query(query, (date,))
         return result
+
+    @staticmethod
+    def delete_by_home_id(home_id: str) -> bool:
+        """Supprime un shipment"""
+        query = "DELETE FROM shipments WHERE home_id = ?"
+        execute_update(query, (home_id,))
+        return True
