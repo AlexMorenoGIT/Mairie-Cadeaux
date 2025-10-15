@@ -6,6 +6,15 @@
     "birth_date": "1998-03-04",
     "email": "aurélien.perrin@example.com",
     "postal_address": "3 place de la République, 17467 Paris",
+    "created_at": "2024-10-15"
+  },
+  {
+    "id": "bd809c1b-bc68-45a0-aaeb-af1810f6hed",
+    "name": "Badol",
+    "firstname": "Leo",
+    "birth_date": "1998-03-04",
+    "email": "badol.leo@example.com",
+    "postal_address": "3 place de la République, 17467 Paris",
     "created_at": "2024-10-09"
   },
   {
