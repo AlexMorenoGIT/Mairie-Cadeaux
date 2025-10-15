@@ -109,11 +109,6 @@ export function DataTable({
             render: (value) => <span className="text-sm text-gray-500 max-w-xs truncate">{value}</span>,
         },
         {
-            key: 'gift',
-            header: "Cadeau",
-            render: (value) => <span className="text-sm text-gray-500">{value?.name || "-"}</span>,
-        },
-        {
             key: "created_at",
             header: "Créé le",
             render: (value) => <span className="text-sm text-gray-500">{formatDate(value)}</span>,
