@@ -6,7 +6,7 @@ export function HomePage({ onNavigate }) {
             <div className="max-w-7xl mx-auto space-y-10">
                 <div className="bg-white rounded-2xl shadow-lg p-8 flex flex-col md:flex-row items-center justify-between gap-6">
                     <div className="text-center md:text-left">
-                        <h1 className="text-4xl font-bold text-gray-900 mb-2">🏠 Gestion des Foyers</h1>
+                        <h1 className="text-4xl font-bold text-gray-900 mb-2">Gestion des Foyers</h1>
                         <p className="text-gray-600">Bienvenue sur l'application de gestion des foyers</p>
                     </div>
                     <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto">

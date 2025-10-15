@@ -172,7 +172,7 @@ export function DataTable({
                             className="inline-flex items-center gap-1 bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 px-3 py-1.5 rounded-lg text-sm"
                             title="Éditer"
                         >
-                            ✏️ Éditer
+                            Éditer
                         </button>
                         <button
                             onClick={() => handleDelete(row)}
@@ -184,7 +184,7 @@ export function DataTable({
                             } text-white px-3 py-1.5 rounded-lg text-sm`}
                             title="Supprimer"
                         >
-                            🗑️ Supprimer
+                            Supprimer
                         </button>
                     </div>
                 ),
