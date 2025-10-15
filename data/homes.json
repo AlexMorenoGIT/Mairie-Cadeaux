@@ -6,15 +6,6 @@
     "birth_date": "1998-03-04",
     "email": "aurélien.perrin@example.com",
     "postal_address": "3 place de la République, 17467 Paris",
-    "created_at": "2024-10-15"
-  },
-  {
-    "id": "bd809c1b-bc68-45a0-aaeb-af1810f6hed",
-    "name": "Badol",
-    "firstname": "Leo",
-    "birth_date": "1998-03-04",
-    "email": "badol.leo@example.com",
-    "postal_address": "3 place de la République, 17467 Paris",
     "created_at": "2024-10-09"
   },
   {
@@ -34,15 +25,6 @@
     "email": "hugo.colin@example.com",
     "postal_address": "14 rue du Moulin, 24180 Marseille",
     "created_at": "2023-11-05"
-  },
-  {
-    "id": "2676b215-4723-4e6c-9b1d-e0d341fdc1cd",
-    "name": "Roux",
-    "firstname": "Lucas",
-    "birth_date": "2005-12-13",
-    "email": "lucas.roux@example.com",
-    "postal_address": "5 avenue Victor Hugo, 59536 Toulouse",
-    "created_at": "2023-11-26T06:24:40.913952"
   },
   {
     "id": "d1411e6c-8ef5-4b58-ab0c-aec2dbc8aa09",

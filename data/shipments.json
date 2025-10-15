@@ -1,5 +1,40 @@
 [
   {
+    "id": "ce06d3af-fa79-4d1a-85e6-239d5cafe49c",
+    "home_id": "b6897d85-c7e2-4c06-8b6f-7da36a6cf816",
+    "gift_id": "6b0db286-1153-4e22-821e-4c706786d033",
+    "status": "EN_ATTENTE",
+    "created_at": "2024-10-24T23:04:40.918649"
+  },
+  {
+    "id": "7c8339fc-d685-4d5a-96fc-3e27ab341ba3",
+    "home_id": "b6897d85-c7e2-4c06-8b6f-7da36a6cf816",
+    "gift_id": "613d66d0-ece5-42e5-a6ae-1ef02f082f46",
+    "status": "RECU",
+    "created_at": "2025-04-09T02:17:40.918834"
+  },
+  {
+    "id": "40556e60-f468-406c-956b-18e201a8fcc1",
+    "home_id": "260135ae-5f8f-4d47-991c-09c19bd10696",
+    "gift_id": "79121756-3baf-42c5-94ef-59a6eca0313c",
+    "status": "EN_ATTENTE",
+    "created_at": "2025-03-27T22:24:40.918912"
+  },
+  {
+    "id": "19bd145a-92b8-425b-a19d-51fa6c00acba",
+    "home_id": "0e72ce61-f621-4b4d-985b-87220c8cd8cf",
+    "gift_id": "ffa21607-71f5-45e5-96da-713a5d06b364",
+    "status": "EXPEDIE",
+    "created_at": "2024-11-14T23:54:40.918987"
+  },
+  {
+    "id": "9272ea91-04a3-4bae-8322-95f467395f42",
+    "home_id": "d1411e6c-8ef5-4b58-ab0c-aec2dbc8aa09",
+    "gift_id": "92f6fdd1-9168-49fe-901b-1cd77b065d3b",
+    "status": "EN_ATTENTE",
+    "created_at": "2023-11-20T09:51:40.919084"
+  },
+  {
     "id": "e999c57e-9310-41fc-8492-977e403c4325",
     "home_id": "216254fd-9f30-4c0c-a680-7343dfe48181",
     "gift_id": "ffa21607-71f5-45e5-96da-713a5d06b364",
@@ -75,13 +110,6 @@
     "gift_id": "57bbf0cd-11a3-44ef-a37c-27d3f2eeef09",
     "status": "RECU",
     "created_at": "2025-03-20T17:58:40.920171"
-  },
-  {
-    "id": "c8d795d3-2311-4328-af97-3feade2648fc",
-    "home_id": "2676b215-4723-4e6c-9b1d-e0d341fdc1cd",
-    "gift_id": "d2677695-4652-4ba2-8762-b78951271fef",
-    "status": "EXPEDIE",
-    "created_at": "2024-12-18T19:42:40.920399"
   },
   {
     "id": "4843b40d-967b-4a3d-8bea-70850941f1ca",
@@ -294,13 +322,6 @@
     "created_at": "2024-07-22T03:51:40.923561"
   },
   {
-    "id": "ede6eb62-c04d-4401-a7e3-c6cf8a30aa03",
-    "home_id": "2676b215-4723-4e6c-9b1d-e0d341fdc1cd",
-    "gift_id": "e3423910-4a82-477a-96da-90ec4c8e1c0e",
-    "status": "EN_ATTENTE",
-    "created_at": "2024-06-29T15:45:40.923687"
-  },
-  {
     "id": "e7db8a9c-5ea1-4cf7-81cb-109208b72254",
     "home_id": "216254fd-9f30-4c0c-a680-7343dfe48181",
     "gift_id": "92f6fdd1-9168-49fe-901b-1cd77b065d3b",
@@ -348,13 +369,6 @@
     "gift_id": "9c812b63-ccd0-486b-9aa0-2cefa3a2c792",
     "status": "EXPEDIE",
     "created_at": "2025-08-02T23:03:40.925170"
-  },
-  {
-    "id": "caec167a-c035-4e45-8c8e-7f6a2e20e4fd",
-    "home_id": "2676b215-4723-4e6c-9b1d-e0d341fdc1cd",
-    "gift_id": "9d1a3f3e-3618-4fec-a75b-80cf5c98d7fa",
-    "status": "EXPEDIE",
-    "created_at": "2024-05-10T12:00:40.925726"
   },
   {
     "id": "cb832707-8f71-490d-87af-6e5930c75340",
@@ -523,13 +537,6 @@
     "gift_id": "e3423910-4a82-477a-96da-90ec4c8e1c0e",
     "status": "EXPEDIE",
     "created_at": "2025-03-10T06:45:40.932118"
-  },
-  {
-    "id": "9e443838-f3cf-4e01-b896-6f7bfffa4e2b",
-    "home_id": "2676b215-4723-4e6c-9b1d-e0d341fdc1cd",
-    "gift_id": "d2677695-4652-4ba2-8762-b78951271fef",
-    "status": "RECU",
-    "created_at": "2023-10-04T04:22:40.932671"
   },
   {
     "id": "cd665cc6-4e9d-474e-8856-aa3f2ba8c096",
@@ -754,13 +761,6 @@
     "gift_id": "92f6fdd1-9168-49fe-901b-1cd77b065d3b",
     "status": "EXPEDIE",
     "created_at": "2024-01-27T22:32:40.974194"
-  },
-  {
-    "id": "e4b27287-dfa5-43e0-aff5-66e4b9f60678",
-    "home_id": "2676b215-4723-4e6c-9b1d-e0d341fdc1cd",
-    "gift_id": "363676dd-de68-47aa-9c12-47aff86dcace",
-    "status": "EXPEDIE",
-    "created_at": "2025-04-15T06:21:40.974520"
   },
   {
     "id": "170adbe0-5778-4448-b6df-fe5ef7c035d3",

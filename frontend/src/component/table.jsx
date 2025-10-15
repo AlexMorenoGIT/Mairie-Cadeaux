@@ -72,6 +72,7 @@ export function DataTable({
                         "Content-Type": "application/json",
                     }
                 })
+                console.log(response);
                 if (!response.ok) {
                     throw new Error('Erreur lors du lancement de l\'attribution')
                 }

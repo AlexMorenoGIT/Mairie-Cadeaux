@@ -71,7 +71,7 @@ class HomeModel:
         """Récupérer les personnes éligibles"""
         datenow = datetime.date.today()
         date_last_year = datenow.replace(year=datenow.year - 1).isoformat()
-        query = "SELECT * FROM homes WHERE  DATE(created_at) = ?"
+        query = "SELECT * FROM homes WHERE  DATE(created_at) <= ?"
         results = execute_query(query, (date_last_year,))
         return results
 
