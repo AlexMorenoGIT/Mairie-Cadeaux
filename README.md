@@ -74,19 +74,64 @@ uv run backend
 
 Le backend sera accessible sur http://localhost:5000
 
+## Pour reinitialiser la base de donnée : 
+- Supprimez simplement le fichier mairie.db
+- Ce fichier sera automatiquement recréé au lancement de l'app si l'app detecte qu'il n'est plus present / vide.
+- Le fichier mairie.db est créé à partir des JSONs présents dans le dossier /data. Si vous souhaitez modifier les données de maniere un peu plus profondes pour des tests, modifier directement les jsons et supprimez le fichier mairie.db
+
 ## Structure du projet
 ```
-Mairie-Cadeaux/
-├── src/
-│   ├── main.py          # Point d'entrée principal
-│   ├── app.py           # API Flask
-│   └── data/
-│       └── homes.json   # Base de données des foyers
-├── frontend/            # Application React
-├── pyproject.toml       # Configuration du projet
-└── README.md
-```
+Directory structure:
+└── alexmorenogit-mairie-cadeaux/
+    ├── README.md
+    ├── pyproject.toml
+    ├── data/
+    │   ├── gifts.json
+    │   ├── homes.json
+    │   └── shipments.json
+    ├── frontend/
+    │   ├── README.md
+    │   ├── eslint.config.js
+    │   ├── index.html
+    │   ├── package.json
+    │   ├── vite.config.js
+    │   └── src/
+    │       ├── App.css
+    │       ├── App.jsx
+    │       ├── index.css
+    │       ├── main.jsx
+    │       ├── component/
+    │       │   └── table.jsx
+    │       └── pages/
+    │           ├── HomeAddPage.jsx
+    │           ├── HomeEditPage.jsx
+    │           ├── HomeListPage.jsx
+    │           ├── HomePage.jsx
+    │           └── ShipmentsList.jsx
+    └── src/
+        ├── __init__.py
+        ├── app.py
+        ├── config.py
+        ├── database.py
+        ├── main.py
+        ├── utils.py
+        ├── models/
+        │   ├── __init__.py
+        │   ├── gifts.py
+        │   ├── home.py
+        │   └── shipments.py
+        ├── routes/
+        │   ├── __init__.py
+        │   ├── gifts_routes.py
+        │   ├── homes_routes.py
+        │   └── shipments_routes.py
+        └── services/
+            ├── __init__.py
+            ├── gift_service.py
+            ├── homes_service.py
+            └── shipments_service.py
 
+```
 ## Technologies utilisées
 - **Backend** : Flask, Flask-CORS
 - **Frontend** : React, Vite, Tailwind CSS
